@@ -28,22 +28,15 @@ public class CameraActivity extends Activity {
         int width = size.x;
         int height = size.y;
         
-        FrameLayout cameraPreview = (FrameLayout) findViewById(R.id.camera_preview);
-        cameraPreview.setLayoutParams(new LinearLayout.LayoutParams(width,width));
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.setLayoutParams(new LinearLayout.LayoutParams(width,width));
         ////
         // Create an instance of Camera
         mCamera = getCameraInstance();
         mCamera.setDisplayOrientation(90);
         // Create our Preview view and set it as the content of our activity.
         mPreview = new CameraPreview(this, mCamera);
-        
-        if (mPreview==null){
-        	Log.v("null", "mpreview was null");
-        }
-        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
-        if (preview==null){
-        	Log.v("null", "preview was null");
-        }
+
         preview.addView(mPreview);
     }
     

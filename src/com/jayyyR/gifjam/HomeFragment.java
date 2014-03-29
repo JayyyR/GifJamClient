@@ -76,7 +76,7 @@ public class HomeFragment extends ListFragment {
 		testfeed.add(testItem2);
 		testfeed.add(testItem3);
 		
-		customAdapter = new ListAdapter(getActivity(), R.layout.feed_view_item, testfeed);
+		customAdapter = new ListAdapter(getActivity(), R.layout.feed_view_item, testfeed, getActivity());
 
 		setListAdapter(customAdapter);
 	}
