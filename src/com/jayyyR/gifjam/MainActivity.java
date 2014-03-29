@@ -2,7 +2,10 @@ package com.jayyyR.gifjam;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.ListFragment;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
@@ -24,7 +27,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		menuItems = getResources().getStringArray(R.array.menu_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -84,6 +87,12 @@ public class MainActivity extends Activity {
 		}
 		// Handle your other action bar items...
 
+		switch (item.getItemId()) {
+		case R.id.action_camera:
+			startCamera();
+			return true;
+		}
+
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -93,7 +102,7 @@ public class MainActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -107,19 +116,15 @@ public class MainActivity extends Activity {
 	private void selectItem(int position) {
 		// Create a new fragment and specify the planet to show based on position
 
-		/*
-	    Fragment fragment = new PlanetFragment();
-	    Bundle args = new Bundle();
-	    args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-	    fragment.setArguments(args);
 
+		if (position == 0){
+			Fragment fragment = new HomeFragment();
 
-	    // Insert the fragment by replacing any existing fragment
-	    FragmentManager fragmentManager = getFragmentManager();
-	    fragmentManager.beginTransaction()
-	                   .replace(R.id.content_frame, fragment)
-	                   .commit();
-		 */
+			// Insert the fragment by replacing any existing fragment
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		}
+
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);
 		setTitle(menuItems[position]);
@@ -130,6 +135,11 @@ public class MainActivity extends Activity {
 	public void setTitle(CharSequence title) {
 		CharSequence mTitle = title;
 		getActionBar().setTitle(mTitle);
+	}
+	
+	public void startCamera(){
+		Intent intent = new Intent(this, CameraActivity.class);
+	    startActivity(intent);
 	}
 
 }

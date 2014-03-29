@@ -26,7 +26,7 @@
         <VideoView
             android:id="@+id/gifContent"
             android:layout_width="fill_parent"
-            android:layout_height="200dp" />
+            android:layout_height="wrap_content" />
     </TableRow>
 
     <TableRow
@@ -36,16 +36,16 @@
         android:padding="5dip" >
         
         <Button 
-            android:id= "@id/likeButton"
+            android:id= "@+id/likeButton"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="<3"
+            android:text="Heart"
             android:layout_gravity="left"/>
          
 
         <TextView
-            android:id="@+id/Likes"
+            android:id="@+id/likes"
             android:layout_weight="1"
             android:gravity="center"
             android:text="likes go here" />

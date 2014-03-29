@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 
 public class ListAdapter extends ArrayAdapter<FeedItem> {
@@ -32,7 +34,7 @@ public class ListAdapter extends ArrayAdapter<FeedItem> {
 
 			LayoutInflater vi;
 			vi = LayoutInflater.from(getContext());
-			v = vi.inflate(R.layout.list_item, null);
+			v = vi.inflate(R.layout.feed_view_item, null);
 
 		}
 
@@ -41,36 +43,12 @@ public class ListAdapter extends ArrayAdapter<FeedItem> {
 
 		if (item != null) {
 
-			TextView id = (TextView) v.findViewById(R.id.idTextView);
-			TextView text = (TextView) v.findViewById(R.id.textTextView);
-			final ImageView image = (ImageView) v.findViewById(R.id.imageImageView);
+			TextView userName = (TextView) v.findViewById(R.id.userName);
+			TextView likes = (TextView) v.findViewById(R.id.likes);
+			VideoView gifContent = (VideoView) v.findViewById(R.id.gifContent);
+			Button likeButton = (Button) v.findViewById(R.id.likeButton);
 
-			//set id
-			if (id != null) {
-				id.setText("id: " + item.id);
-			}
-			
-			//if the type is text
-			if (text != null && !item.isImage()) {
-				//show textview, hide imageview
-				text.setVisibility(View.VISIBLE);
-				image.setVisibility(View.GONE);
-				text.setText(item.data);
-			}
-			//if the type is image
-			else if (image != null) {
-				//show imageview, hide textview
-				image.setVisibility(View.VISIBLE);
-				text.setVisibility(View.GONE);
-				
-				if(item.image != null)
-					image.setImageBitmap(item.image);
-				//a good amount of the urls for the images lead nowhere. I'm putting this image here to indicate those
-				else
-					image.setImageResource(R.drawable.error);
 
-				
-			}
 		}
 
 		return v;

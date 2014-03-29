@@ -2,9 +2,9 @@ package com.jayyyR.gifjam;
 
 import java.util.ArrayList;
 
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 public class HomeFragment extends ListFragment {
-	int mNum;
-
+	int mNum; //mnum for home or prof?
+	
 	//new instance of our list fragment, pass num as the argument to indicate what page we're on
 	static HomeFragment newInstance(int num) {
 		HomeFragment f = new HomeFragment();
@@ -47,7 +47,36 @@ public class HomeFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 		//create new custom adapter
 		ListAdapter customAdapter;
-		customAdapter = new ListAdapter(getActivity(), R.layout.list_item, Home.data);
+		
+		//test feed item
+		FeedItem testItem = new FeedItem();
+		testItem.username = "JayyyR";
+		testItem.caption = "This is a test gif";
+		testItem.gif_url = "";
+		testItem.video_url = "";
+		testItem.likes = new ArrayList<String>();
+		
+		FeedItem testItem2 = new FeedItem();
+		testItem.username = "JayyyR";
+		testItem.caption = "This is a test gif";
+		testItem.gif_url = "";
+		testItem.video_url = "";
+		testItem.likes = new ArrayList<String>();
+		
+		FeedItem testItem3 = new FeedItem();
+		testItem.username = "JayyyR";
+		testItem.caption = "This is a test gif";
+		testItem.gif_url = "";
+		testItem.video_url = "";
+		testItem.likes = new ArrayList<String>();
+		
+		
+		ArrayList<FeedItem> testfeed = new ArrayList<FeedItem>();
+		testfeed.add(testItem);
+		testfeed.add(testItem2);
+		testfeed.add(testItem3);
+		
+		customAdapter = new ListAdapter(getActivity(), R.layout.feed_view_item, testfeed);
 
 		setListAdapter(customAdapter);
 	}

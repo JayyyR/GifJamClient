@@ -21,7 +21,7 @@ public class FeedItem {
 	public String video_url;
 	
 	@SerializedName("likes")
-	public ArrayList likes;
+	public ArrayList<String> likes;
 	
 
 }
