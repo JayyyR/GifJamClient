@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="userName"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+
+        <VideoView
+            android:id="@+id/gifContent"
+            android:layout_width="fill_parent"
+            android:layout_height="200dp" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+        
+        <Button 
+            android:id= "@id/likeButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="<3"
+            android:layout_gravity="left"/>
+         
+
+        <TextView
+            android:id="@+id/Likes"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="likes go here" />
+    </TableRow>
+
+</TableLayout>
