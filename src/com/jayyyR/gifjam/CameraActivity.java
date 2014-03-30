@@ -5,8 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import android.os.Handler;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -16,14 +18,19 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Message;
 import android.util.Log;
 import android.view.Display;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class CameraActivity extends Activity {
 
@@ -35,6 +42,7 @@ public class CameraActivity extends Activity {
 	public static final int MEDIA_TYPE_IMAGE = 1;
 	public static final int MEDIA_TYPE_VIDEO = 2;
 	private boolean isRecording = false;
+	public Activity thisActive;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +50,7 @@ public class CameraActivity extends Activity {
 		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		//		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_camera);
-		
+
 
 		//get display size to set the camera preview
 		Display display = getWindowManager().getDefaultDisplay();
@@ -50,7 +58,7 @@ public class CameraActivity extends Activity {
 		display.getSize(size);
 		screenWidth = size.x;
 		screenHeight = size.y;
-
+		thisActive = this;
 		FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
 
 
@@ -61,11 +69,22 @@ public class CameraActivity extends Activity {
 		Size mPreviewSize = null;
 		List<Size> mSupportedPreviewSizes = mCamera.getParameters().getSupportedPreviewSizes();
 		if (mSupportedPreviewSizes != null) {
-	           mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, screenWidth, screenHeight);
-	        }
+			mPreviewSize = getOptimalPreviewSize(mSupportedPreviewSizes, screenWidth, screenHeight);
+		}
 
 		Camera.Parameters parameters = mCamera.getParameters();
 		parameters.setPreviewSize(mPreviewSize.width, mPreviewSize.height);
+
+		//block off correct size
+		Log.v("height", "height of preview: " + mPreviewSize.height);
+		Log.v("height", "height of preview: " + mPreviewSize.width);
+		int pixelsToBlock = screenHeight-screenWidth;
+		Log.v("height", "pixelstoBlock: " + pixelsToBlock);
+		View whiteBox = (View) findViewById(R.id.whitebox);
+		RelativeLayout.LayoutParams boxParams = (android.widget.RelativeLayout.LayoutParams) whiteBox.getLayoutParams();
+		boxParams.height = pixelsToBlock;
+		whiteBox.setLayoutParams(boxParams);
+
 		mCamera.setParameters(parameters);
 		mCamera.startPreview();
 		mCamera.setDisplayOrientation(90);
@@ -73,15 +92,138 @@ public class CameraActivity extends Activity {
 
 		// Create our Preview view and set it as the content of our activity.
 		mPreview = new CameraPreview(this, mCamera);
+		final TextView countdown = (TextView) findViewById(R.id.textCounter);
+		final Handler handler = new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				if(msg.what==1){
+					Log.v("recorded", "counter " + msg.arg1);
+					countdown.setText(Integer.toString(5-msg.arg1));
+					msg.what=0;
+				}
+				else if(msg.what==2){
+					Intent intent = new Intent(thisActive, SendVideo.class);
+				    startActivity(intent);
+				    msg.what=0;
+				}
+				super.handleMessage(msg);
+			}
+		};
 
 		preview.addView(mPreview);
+		final Button captureButton = (Button) findViewById(R.id.button_capture);
+		
+		final Thread camCount = new Thread(new Runnable(){
+			@Override
+			public void run() {
+				try {
+					int counter = 0;
+					while(isRecording == true){
+
+						if (counter >= 5){
+							Log.v("recording", "breaking out");
+							// stop recording and release camera
+							mMediaRecorder.stop();  // stop the recording
+							releaseMediaRecorder(); // release the MediaRecorder object
+							mCamera.lock();         // take camera access back from MediaRecorder
+							Log.v("recording", "before settting capture button");
+							// inform the user that recording has stopped
+							isRecording = false;
+
+							Log.v("recording", "after setting isrecording");
+							//captureButton.setText("Capture");
+							Log.v("recording", "after settting capture button");
+							
+							Message msg = handler.obtainMessage();
+							msg.what = 2; //break out
+							handler.sendMessage(msg);
+
+
+						}
+						Log.v("recording", "yes");
+						counter+=1;
+						Thread.sleep(1000);
+						Message msg = handler.obtainMessage();
+						msg.what = (1);
+						msg.arg1 = counter;
+						handler.sendMessage(msg);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+
+
 
 
 
 		// Add a listener to the Capture button
-		Button captureButton = (Button) findViewById(R.id.button_capture);
-		captureButton.setOnClickListener(
-				new View.OnClickListener() {
+
+		captureButton.setOnTouchListener(
+				new View.OnTouchListener() {
+
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						switch (event.getAction() & MotionEvent.ACTION_MASK) {
+
+						case MotionEvent.ACTION_DOWN:
+							v.setPressed(true);
+							Log.v("touch", "touching button");
+							isRecording = true;
+							// initialize video camera
+							if (prepareVideoRecorder()) {
+								// Camera is available and unlocked, MediaRecorder is prepared,
+								// now you can start recording
+								mMediaRecorder.start();
+
+								// inform the user that recording has started
+								setCaptureButtonText("Stop");
+								//isRecording = true;
+							} else {
+								// prepare didn't work, release the camera
+								releaseMediaRecorder();
+								// inform user
+							}
+
+							//count for 5 then break
+							camCount.start();
+							break;
+						case MotionEvent.ACTION_UP:
+							Log.v("touch", "let go of button");
+							Log.v("recording", "is Recording: " + isRecording);
+							if (isRecording == true){
+								v.setPressed(false);
+
+								// stop recording and release camera
+								mMediaRecorder.stop();  // stop the recording
+								releaseMediaRecorder(); // release the MediaRecorder object
+								mCamera.lock();         // take camera access back from MediaRecorder
+
+								// inform the user that recording has stopped
+								setCaptureButtonText("Capture");
+								isRecording = false;
+							}
+							Intent intent = new Intent(thisActive, SendVideo.class);
+						    startActivity(intent);
+							break;
+						case MotionEvent.ACTION_OUTSIDE:
+
+							// Stop action ...
+							break;
+						case MotionEvent.ACTION_POINTER_DOWN:
+							break;
+						case MotionEvent.ACTION_POINTER_UP:
+							break;
+						case MotionEvent.ACTION_MOVE:
+							break;
+						}
+
+						return true;
+					}
+				}
+				/*new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						if (isRecording) {
@@ -110,7 +252,7 @@ public class CameraActivity extends Activity {
 							}
 						}
 					}
-				}
+				}*/
 				);
 	}
 
@@ -119,53 +261,63 @@ public class CameraActivity extends Activity {
 		captureButton.setText(text);
 	}
 
+
+
 	private Camera.Size getOptimalPreviewSize(List<Camera.Size> sizes, int w, int h) {
-        final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio=(double)h / w;
+		final double ASPECT_TOLERANCE = 0.1;
+		double targetRatio=(double)h / w;
 
-        if (sizes == null) return null;
+		if (sizes == null) return null;
 
-        Camera.Size optimalSize = null;
-        double minDiff = Double.MAX_VALUE;
+		Camera.Size optimalSize = null;
+		double minDiff = Double.MAX_VALUE;
 
-        int targetHeight = h;
+		int targetHeight = h;
 
-        for (Camera.Size size : sizes) {
-            double ratio = (double) size.width / size.height;
-            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
-            if (Math.abs(size.height - targetHeight) < minDiff) {
-                optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
-            }
-        }
+		for (Camera.Size size : sizes) {
+			double ratio = (double) size.width / size.height;
+			if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+			if (Math.abs(size.height - targetHeight) < minDiff) {
+				optimalSize = size;
+				minDiff = Math.abs(size.height - targetHeight);
+			}
+		}
 
-        if (optimalSize == null) {
-            minDiff = Double.MAX_VALUE;
-            for (Camera.Size size : sizes) {
-                if (Math.abs(size.height - targetHeight) < minDiff) {
-                    optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
-                }
-            }
-        }
-        return optimalSize;
-    }
+		if (optimalSize == null) {
+			minDiff = Double.MAX_VALUE;
+			for (Camera.Size size : sizes) {
+				if (Math.abs(size.height - targetHeight) < minDiff) {
+					optimalSize = size;
+					minDiff = Math.abs(size.height - targetHeight);
+				}
+			}
+		}
+		return optimalSize;
+	}
 
 	private boolean prepareVideoRecorder(){
 		if(mCamera == null)
 			Log.v("null", "mcamera was null");
 		mMediaRecorder = new MediaRecorder();
+		
+		 // store the quality profile required
+	    CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
 
 		// Step 1: Unlock and set camera to MediaRecorder
 		mCamera.unlock();
 		mMediaRecorder.setCamera(mCamera);
 
 		// Step 2: Set sources
-		mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
+		//mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
 		mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 
 		// Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
-		mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH));
+		mMediaRecorder.setOutputFormat(profile.fileFormat);
+	    mMediaRecorder.setVideoEncoder(profile.videoCodec);
+	    mMediaRecorder.setVideoEncodingBitRate(profile.videoBitRate);
+	    mMediaRecorder.setVideoFrameRate(profile.videoFrameRate);
+	    mMediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
+
 
 		// Step 4: Set output file
 		String fileLoc = getOutputMediaFile(MEDIA_TYPE_VIDEO).toString();

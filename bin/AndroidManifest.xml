@@ -34,6 +34,10 @@
             android:name="com.jayyyR.gifjam.CameraActivity"
             android:label="@string/title_activity_camera" >
         </activity>
+        <activity
+            android:name="com.jayyyR.gifjam.SendVideo"
+            android:label="@string/title_activity_send_video" >
+        </activity>
     </application>
 
 </manifest>
