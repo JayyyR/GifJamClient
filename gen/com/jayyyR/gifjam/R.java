@@ -35,7 +35,6 @@ public final class R {
         public static final int camera_preview=0x7f090000;
         public static final int content_frame=0x7f090003;
         public static final int drawer_layout=0x7f090002;
-        public static final int gifContent=0x7f090008;
         public static final int left_drawer=0x7f090004;
         public static final int likeButton=0x7f09000a;
         public static final int likes=0x7f09000b;
@@ -43,6 +42,7 @@ public final class R {
         public static final int tableRow2=0x7f090007;
         public static final int tableRow3=0x7f090009;
         public static final int userName=0x7f090006;
+        public static final int webContent=0x7f090008;
     }
     public static final class layout {
         public static final int activity_camera=0x7f030000;

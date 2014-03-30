@@ -17,18 +17,18 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </TableRow>
 
+
     <TableRow
         android:id="@+id/tableRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dip" >
 
-        <VideoView
-            android:id="@+id/gifContent"
+        <WebView
+            android:id="@+id/webContent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </TableRow>
-
     <TableRow
         android:id="@+id/tableRow3"
         android:layout_width="wrap_content"

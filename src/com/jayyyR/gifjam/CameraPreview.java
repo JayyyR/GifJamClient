@@ -47,7 +47,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         // Make sure to stop the preview before resizing or reformatting it.
     	Log.v("jayrca", "cam width = " + w);
     	Log.v("jayrca", "cam height = " + h);
-    	h= 720;
+    	//h= 720;
         if (mHolder.getSurface() == null){
           // preview surface does not exist
           return;
@@ -62,7 +62,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
         // set preview size and make any resize, rotate or
         // reformatting changes here
-
+        //h=720;
         // start preview with new settings
         try {
             mCamera.setPreviewDisplay(mHolder);

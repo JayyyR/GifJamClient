@@ -11,15 +11,18 @@ public class FeedItem {
 	@SerializedName("username")
 	public String username;
 	
-	@SerializedName("caption")
-	public String caption;
-	
 	@SerializedName("gif_url")
 	public String gif_url;
 	
-	@SerializedName("video_url")
-	public String video_url;
+	@SerializedName("timestamp")
+	public long timestamp;
 	
+	@SerializedName("comments")
+	public ArrayList<String> comments;
+	
+	@SerializedName("caption")
+	public String caption;
+
 	@SerializedName("likes")
 	public ArrayList<String> likes;
 	
