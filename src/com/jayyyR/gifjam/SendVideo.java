@@ -55,6 +55,7 @@ public class SendVideo extends Activity {
 	String profileId;
 	String captionString;
 	Activity active;
+	boolean forProf;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -65,23 +66,34 @@ public class SendVideo extends Activity {
 			fileLoc = extras.getString("file");
 			user = extras.getString("user");
 			profileId = extras.getString("profileId");
+			forProf = extras.getBoolean("forProf");
 		}
 
 		Log.v("filelocation", fileLoc);
-		
+
 		Button upload = (Button) findViewById(R.id.sendVideo);
 		final EditText caption = (EditText) findViewById(R.id.captionField);
+
+		if (forProf)
+			caption.setVisibility(View.GONE);
+
 		upload.setOnClickListener(new View.OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				
-				captionString = caption.getText().toString();
-				sendVideo task = new sendVideo();
-				task.execute();
+
+				if (!forProf){
+					captionString = caption.getText().toString();
+					sendVideo task = new sendVideo();
+					task.execute();
+				}
+				else{
+					sendProf task = new sendProf();
+					task.execute();
+				}
 			}
-			
+
 		});
 
 	}
@@ -95,7 +107,7 @@ public class SendVideo extends Activity {
 	}
 
 	private class sendVideo extends AsyncTask<String, Void, String> {
-		
+
 		ProgressDialog pDialog;
 		@Override
 		protected void onPreExecute() {
@@ -144,7 +156,68 @@ public class SendVideo extends Activity {
 			return null;
 		}
 
-		
+
+
+		@Override
+		protected void onPostExecute(String result) {
+			pDialog.dismiss();
+			Intent intent = new Intent(active, MainActivity.class);
+			intent.putExtra("user", user);
+			intent.putExtra("profileId", profileId);
+			startActivity(intent);
+
+		}
+	}
+
+
+	private class sendProf extends AsyncTask<String, Void, String> {
+
+		ProgressDialog pDialog;
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			pDialog= ProgressDialog.show(active, "Sending and Converting Video","Please Wait", true);
+		}
+
+		@Override
+		protected String doInBackground(String... urls) {
+
+			HttpClient client = new DefaultHttpClient();
+			HttpContext localContext = new BasicHttpContext();
+			Log.v("mainActivity", "sending to: " + profileId);
+			HttpPost post = new HttpPost("http://128.239.163.254:5000/upload/profile_gif/"+profileId);
+			try {
+				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+				nameValuePairs.add(new BasicNameValuePair("video", fileLoc));
+				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+				for(int index=0; index < nameValuePairs.size(); index++) {
+					if(nameValuePairs.get(index).getName().equalsIgnoreCase("video")) {
+						// If the key equals to "image", we use FileBody to transfer the data
+						Log.v("datasend", "index is: " + index);
+						Log.v("datasend", "get name is: " + nameValuePairs.get(index).getName());
+						Log.v("datasend", "get value is: " + nameValuePairs.get(index).getValue());
+						entity.addPart(nameValuePairs.get(index).getName(), new FileBody(new File (nameValuePairs.get(index).getValue())));
+					} else {
+						// Normal string data
+						entity.addPart(nameValuePairs.get(index).getName(), new StringBody(nameValuePairs.get(index).getValue()));
+					}
+				}
+
+				post.setEntity(entity);
+
+				HttpResponse response = client.execute(post, localContext);
+
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+
+
 
 		@Override
 		protected void onPostExecute(String result) {

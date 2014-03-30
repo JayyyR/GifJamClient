@@ -26,6 +26,9 @@ import com.google.gson.reflect.TypeToken;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -61,6 +64,7 @@ public class ProfileFragment extends Fragment{
 	WebView gifContent;
 	Button nextButton;
 	Button prevButton;
+	Button shareButton;
 
 	boolean canFollow = true;
 	ArrayList<FeedItem> feedData;
@@ -113,6 +117,20 @@ public class ProfileFragment extends Fragment{
 		likeButton = (Button) v.findViewById(R.id.likeButton);
 		nextButton = (Button) v.findViewById(R.id.nextButton);
 		prevButton = (Button) v.findViewById(R.id.prevButton);
+		shareButton = (Button) v.findViewById(R.id.shareButton);
+		
+		shareButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+				ClipData clip = ClipData.newPlainText("label",feedData.get(currentPage).gif_url);
+				clipboard.setPrimaryClip(clip);
+				Toast.makeText(getActivity(), "Gif Url copied to clipboard", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
 
 		likeButton.setOnClickListener(new View.OnClickListener() {
 
@@ -177,6 +195,7 @@ public class ProfileFragment extends Fragment{
 			gifContent.setVisibility(View.VISIBLE);
 			caption.setVisibility(View.VISIBLE);
 			likeButton.setVisibility(View.VISIBLE);
+			shareButton.setVisibility(View.VISIBLE);
 			if (feedData.get(currentPage) != null){
 				username.setText("@" +feedData.get(currentPage).username);
 				caption.setText(feedData.get(currentPage).caption);
@@ -203,6 +222,7 @@ public class ProfileFragment extends Fragment{
 			gifContent.setVisibility(View.GONE);
 			caption.setVisibility(View.GONE);
 			likeButton.setVisibility(View.GONE);
+			shareButton.setVisibility(View.GONE);
 		}
 
 	}

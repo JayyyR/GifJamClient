@@ -118,10 +118,18 @@ public class CameraActivity extends Activity {
 						intent.putExtra("file", fileLoc);
 						intent.putExtra("user", user);
 						intent.putExtra("profileId", profileId);
+						intent.putExtra("forProf", false);
 						startActivity(intent);
 						msg.what=0;
 					}
 					else{
+						Intent intent = new Intent(thisActive, SendVideo.class);
+						intent.putExtra("file", fileLoc);
+						intent.putExtra("user", user);
+						intent.putExtra("profileId", profileId);
+						intent.putExtra("forProf", true);
+						startActivity(intent);
+						msg.what=0;
 
 
 					}
@@ -230,9 +238,16 @@ public class CameraActivity extends Activity {
 								intent.putExtra("file", fileLoc);
 								intent.putExtra("user", user);
 								intent.putExtra("profileId", profileId);
+								intent.putExtra("forProf", false);
 								startActivity(intent);}
 							else{
-
+								
+								Intent intent = new Intent(thisActive, SendVideo.class);
+								intent.putExtra("file", fileLoc);
+								intent.putExtra("user", user);
+								intent.putExtra("profileId", profileId);
+								intent.putExtra("forProf", true);
+								startActivity(intent);
 							}
 							break;
 						case MotionEvent.ACTION_OUTSIDE:
@@ -328,7 +343,7 @@ public class CameraActivity extends Activity {
 		mMediaRecorder = new MediaRecorder();
 
 		// store the quality profile required
-		CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+		CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 
 		// Step 1: Unlock and set camera to MediaRecorder
 		mCamera.unlock();

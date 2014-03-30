@@ -50,6 +50,10 @@
             android:name="com.jayyyR.gifjam.Search"
             android:label="@string/title_activity_search" >
         </activity>
+        <activity
+            android:name="com.jayyyR.gifjam.Register"
+            android:label="@string/title_activity_register" >
+        </activity>
     </application>
 
 </manifest>

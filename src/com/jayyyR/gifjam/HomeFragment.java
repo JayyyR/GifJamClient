@@ -26,17 +26,23 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.ListFragment;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HomeFragment extends Fragment {
 	int mNum; //mnum for home or prof?
@@ -52,7 +58,7 @@ public class HomeFragment extends Fragment {
 	Button nextButton;
 	Button prevButton;
 	String loggedUser;
-
+	Button shareButton;
 
 	//new instance of our list fragment, pass num as the argument to indicate what page we're on
 	static HomeFragment newInstance(int num) {
@@ -76,7 +82,7 @@ public class HomeFragment extends Fragment {
 		Log.v("mainActivity", "profile id in frag: " + profileId);
 
 	}
-
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,17 +94,31 @@ public class HomeFragment extends Fragment {
 		username = (TextView) v.findViewById(R.id.userName);
 		likes = (TextView) v.findViewById(R.id.likes);
 		gifContent = (WebView) v.findViewById(R.id.webContent);
+		
 		caption = (TextView) v.findViewById(R.id.captionContent);
 		likeButton = (Button) v.findViewById(R.id.likeButton);
 		nextButton = (Button) v.findViewById(R.id.nextButton);
 		prevButton = (Button) v.findViewById(R.id.prevButton);
+		shareButton = (Button) v.findViewById(R.id.shareButton);
+		
+		shareButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+				ClipData clip = ClipData.newPlainText("label",feedData.get(currentPage).gif_url);
+				clipboard.setPrimaryClip(clip);
+				Toast.makeText(getActivity(), "Gif Url copied to clipboard", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
 
 
 		likeButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				
 				String likesText = likes.getText().toString();
 				StringBuilder likesBuilder = new StringBuilder(likesText);
 				likesBuilder.append(", " + loggedUser);
@@ -146,6 +166,7 @@ public class HomeFragment extends Fragment {
 			gifContent.setVisibility(View.VISIBLE);
 			caption.setVisibility(View.VISIBLE);
 			likeButton.setVisibility(View.VISIBLE);
+			shareButton.setVisibility(View.VISIBLE);
 			if (feedData.get(currentPage) != null){
 				username.setText("@" +feedData.get(currentPage).username);
 				caption.setText(feedData.get(currentPage).caption);
@@ -171,6 +192,7 @@ public class HomeFragment extends Fragment {
 			gifContent.setVisibility(View.GONE);
 			caption.setVisibility(View.GONE);
 			likeButton.setVisibility(View.GONE);
+			shareButton.setVisibility(View.GONE);
 		}
 
 	}

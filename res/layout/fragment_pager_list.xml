@@ -79,6 +79,16 @@
                     android:layout_marginLeft="12dp"
                     android:text="likes go here"
                     android:textColor="#FF2111" />
+                
+                
+                <Button
+                    android:id="@+id/shareButton"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignBottom="@+id/likeButton"
+                    android:background="@drawable/ic_action_copy"
+                    android:layout_alignParentRight= "true"
+                    android:text="" />
             </RelativeLayout>
         </TableRow>
     </TableLayout>
