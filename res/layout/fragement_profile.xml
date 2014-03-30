@@ -10,36 +10,37 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
-    <TextView
-        android:id="@+id/userName"
+    <Button
+        android:id="@+id/follow"
+        style="@style/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/profileGif"
+        android:layout_alignBottom="@+id/profileGif"
         android:layout_toRightOf="@+id/profileGif"
-        android:text="username goes here" />
+        android:text="Follow" />
 
     <TextView
         android:id="@+id/bio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userName"
+        android:layout_above="@+id/follow"
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/profileGif"
         android:text="bio goes here" />
 
-    <Button
-        android:id="@+id/follow"
+    <TextView
+        android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/profileGif"
-        android:text="Follow" />
+        android:layout_above="@+id/bio"
+        android:layout_toRightOf="@+id/profileGif"
+        android:text="username goes here" />
 
     <RelativeLayout
         android:id="@android:id/list"
-        android:layout_below="@+id/follow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/follow"
         android:drawSelectorOnTop="false" >
 
         <TableLayout
@@ -69,8 +70,8 @@
 
                 <WebView
                     android:id="@+id/webContent"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp" />
+                    android:layout_width="300dp"
+                    android:layout_height="300dp" />
             </TableRow>
 
             <TableRow
@@ -86,54 +87,58 @@
                     android:text="caption goes here"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
             </TableRow>
-            
+
             <TableRow
             android:id="@+id/tableRoww"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="5dip" >
 
-            <TextView
-                android:id="@+id/likes"
-                android:textColor="#FF2111"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="likes go here" />
-        </TableRow>
-
-            <TableRow
-                android:id="@+id/tableRow3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="5dip" >
+            <RelativeLayout
+                android:id="@+id/relative"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawSelectorOnTop="false" >
 
                 <Button
                     android:id="@+id/likeButton"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:layout_gravity="left"
-                    android:gravity="center"
-                    android:text="Heart" />
+                    android:background="@drawable/ic_action_good"
+                    android:layout_alignParentLeft= "true"
+                    android:text="" />
 
-      
-            </TableRow>
+                <TextView
+                    android:id="@+id/likes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf= "@+id/likeButton"
+                    android:layout_alignBottom="@+id/likeButton"
+                    android:layout_marginBottom="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:text="likes go here"
+                    android:textColor="#FF2111" />
+            </RelativeLayout>
+        </TableRow>
         </TableLayout>
 
         <Button
             android:id="@+id/prevButton"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:text="Previous" />
+            android:background="@drawable/ic_action_previous_item"
+            android:text="" />
 
         <Button
             android:id="@+id/nextButton"
-            android:layout_width="100dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:text="Next" />
+            android:background="@drawable/ic_action_next_item"
+            android:text="" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -177,6 +177,14 @@ public class HomeFragment extends Fragment {
 
 
 	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		gifContent.destroy();
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		//create new custom adapter

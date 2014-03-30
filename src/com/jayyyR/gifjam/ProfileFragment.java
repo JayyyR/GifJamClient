@@ -50,6 +50,7 @@ public class ProfileFragment extends Fragment{
 	WebView profGif;
 	ListView profFeed;
 	Button follow;
+	
 	ProfileItem profData;
 
 	int currentPage = 0;
@@ -117,6 +118,11 @@ public class ProfileFragment extends Fragment{
 
 			@Override
 			public void onClick(View v) {
+				
+				String likesText = likes.getText().toString();
+				StringBuilder likesBuilder = new StringBuilder(likesText);
+				likesBuilder.append(", " + user);
+				likes.setText(likesBuilder.toString());
 				like task = new like();
 				task.execute();
 
@@ -152,6 +158,16 @@ public class ProfileFragment extends Fragment{
 
 		return v;
 	}
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+		profGif.destroy();
+		gifContent.destroy();
+	}
+
 
 	public void afterData(){
 		if (feedData.size() >0){
