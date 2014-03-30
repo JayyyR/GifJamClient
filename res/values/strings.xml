@@ -6,5 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_camera">CameraActivity</string>
     <string name="title_activity_send_video">SendVideo</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_profile">Profile</string>
 
 </resources>

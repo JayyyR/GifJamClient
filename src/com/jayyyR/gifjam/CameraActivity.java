@@ -44,6 +44,8 @@ public class CameraActivity extends Activity {
 	private boolean isRecording = false;
 	public Activity thisActive;
 	String fileLoc;
+	String user;
+	String profileId;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,6 +53,12 @@ public class CameraActivity extends Activity {
 		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		//		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_camera);
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			user = extras.getString("user");
+			profileId = extras.getString("profileId");
+		}
 
 
 		//get display size to set the camera preview
@@ -105,6 +113,8 @@ public class CameraActivity extends Activity {
 				else if(msg.what==2){
 					Intent intent = new Intent(thisActive, SendVideo.class);
 					intent.putExtra("file", fileLoc);
+					intent.putExtra("user", user);
+					intent.putExtra("profileId", profileId);
 				    startActivity(intent);
 				    msg.what=0;
 				}
@@ -209,6 +219,8 @@ public class CameraActivity extends Activity {
 							}
 							Intent intent = new Intent(thisActive, SendVideo.class);
 							intent.putExtra("file", fileLoc);
+							intent.putExtra("user", user);
+							intent.putExtra("profileId", profileId);
 						    startActivity(intent);
 							break;
 						case MotionEvent.ACTION_OUTSIDE:

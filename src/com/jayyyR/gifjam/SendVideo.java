@@ -46,19 +46,22 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.util.EntityUtils;
 
-
-
 public class SendVideo extends Activity {
 
 	String fileLoc;
+	String user;
+	String profileId;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_send_video);
 
 		Bundle extras = getIntent().getExtras();
-		if (extras != null) 
+		if (extras != null) {
 			fileLoc = extras.getString("file");
+			user = extras.getString("user");
+			profileId = extras.getString("profileId");
+		}
 
 		Log.v("filelocation", fileLoc);
 		
@@ -94,7 +97,8 @@ public class SendVideo extends Activity {
 
 			HttpClient client = new DefaultHttpClient();
 			HttpContext localContext = new BasicHttpContext();
-			HttpPost post = new HttpPost("http://128.239.163.254:5000/upload");
+			Log.v("mainActivity", "sending to: " + profileId);
+			HttpPost post = new HttpPost("http://128.239.163.254:5000/upload/"+profileId);
 			try {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 				nameValuePairs.add(new BasicNameValuePair("video", fileLoc));

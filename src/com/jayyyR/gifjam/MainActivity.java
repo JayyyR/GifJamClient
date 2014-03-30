@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,11 +23,21 @@ public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+	String profileId;
+	
+	String user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			user = extras.getString("user");
+			profileId = extras.getString("profileId");
+			Log.v("mainActivity", "prof id: " + profileId);
+		}
 
 		menuItems = getResources().getStringArray(R.array.menu_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -119,8 +130,22 @@ public class MainActivity extends Activity {
 
 		if (position == 0){
 			Fragment fragment = new HomeFragment();
-
+			Bundle bundle = new Bundle();
+			bundle.putString("profileId", profileId);
+			fragment.setArguments(bundle);
 			// Insert the fragment by replacing any existing fragment
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		}
+		
+		else if (position == 2){
+			
+			Fragment fragment = new ProfileFragment();
+			Bundle bundle = new Bundle();
+			bundle.putString("profileId", profileId);
+			bundle.putString("user", user);
+			fragment.setArguments(bundle);
+			
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 		}
@@ -139,6 +164,8 @@ public class MainActivity extends Activity {
 	
 	public void startCamera(){
 		Intent intent = new Intent(this, CameraActivity.class);
+		intent.putExtra("user", user);
+		intent.putExtra("profileId", profileId);
 	    startActivity(intent);
 	}
 
