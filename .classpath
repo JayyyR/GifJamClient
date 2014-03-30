@@ -8,5 +8,10 @@
 	<classpathentry kind="lib" path="libs/gson-2.2.4-javadoc.jar"/>
 	<classpathentry kind="lib" path="libs/gson-2.2.4-sources.jar"/>
 	<classpathentry kind="lib" path="libs/gson-2.2.4.jar"/>
+	<classpathentry kind="lib" path="libs/httpmime-4.3.3.jar"/>
+	<classpathentry kind="lib" path="libs/apache-mime4j-0.6.1.jar"/>
+	<classpathentry kind="lib" path="libs/httpclient-4.3.3.jar"/>
+	<classpathentry kind="lib" path="libs/httpclient-cache-4.3.3.jar"/>
+	<classpathentry kind="lib" path="libs/httpcore-4.3.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

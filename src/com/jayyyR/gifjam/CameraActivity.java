@@ -43,6 +43,7 @@ public class CameraActivity extends Activity {
 	public static final int MEDIA_TYPE_VIDEO = 2;
 	private boolean isRecording = false;
 	public Activity thisActive;
+	String fileLoc;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -103,6 +104,7 @@ public class CameraActivity extends Activity {
 				}
 				else if(msg.what==2){
 					Intent intent = new Intent(thisActive, SendVideo.class);
+					intent.putExtra("file", fileLoc);
 				    startActivity(intent);
 				    msg.what=0;
 				}
@@ -206,6 +208,7 @@ public class CameraActivity extends Activity {
 								isRecording = false;
 							}
 							Intent intent = new Intent(thisActive, SendVideo.class);
+							intent.putExtra("file", fileLoc);
 						    startActivity(intent);
 							break;
 						case MotionEvent.ACTION_OUTSIDE:
@@ -320,7 +323,7 @@ public class CameraActivity extends Activity {
 
 
 		// Step 4: Set output file
-		String fileLoc = getOutputMediaFile(MEDIA_TYPE_VIDEO).toString();
+		fileLoc = getOutputMediaFile(MEDIA_TYPE_VIDEO).toString();
 		Log.v("fileloc", fileLoc);
 		mMediaRecorder.setOutputFile(fileLoc);
 
@@ -380,7 +383,7 @@ public class CameraActivity extends Activity {
 		// using Environment.getExternalStorageState() before doing this.
 
 		File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-				Environment.DIRECTORY_PICTURES), "MyCameraApp");
+				Environment.DIRECTORY_PICTURES), "GifJam");
 		// This location works best if you want the created images to be shared
 		// between applications and persist after your app has been uninstalled.
 
