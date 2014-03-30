@@ -27,13 +27,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.os.Build;
 
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -51,6 +51,7 @@ public class SendVideo extends Activity {
 	String fileLoc;
 	String user;
 	String profileId;
+	String captionString;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,12 +67,14 @@ public class SendVideo extends Activity {
 		Log.v("filelocation", fileLoc);
 		
 		Button upload = (Button) findViewById(R.id.sendVideo);
-		
+		final EditText caption = (EditText) findViewById(R.id.captionField);
 		upload.setOnClickListener(new View.OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				
+				captionString = caption.getText().toString();
 				sendVideo task = new sendVideo();
 				task.execute();
 			}
@@ -102,6 +105,7 @@ public class SendVideo extends Activity {
 			try {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 				nameValuePairs.add(new BasicNameValuePair("video", fileLoc));
+				nameValuePairs.add(new BasicNameValuePair("caption", captionString));
 				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 
 				for(int index=0; index < nameValuePairs.size(); index++) {

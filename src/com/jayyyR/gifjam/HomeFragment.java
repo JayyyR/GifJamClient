@@ -29,6 +29,7 @@ public class HomeFragment extends ListFragment {
 	int mNum; //mnum for home or prof?
 	ArrayList<FeedItem> feedData;
 	String profileId;
+	View theView;
 
 	//new instance of our list fragment, pass num as the argument to indicate what page we're on
 	static HomeFragment newInstance(int num) {
@@ -49,7 +50,7 @@ public class HomeFragment extends ListFragment {
 		mNum = getArguments() != null ? getArguments().getInt("num") : 1;
 		profileId = getArguments().getString("profileId");   
 		Log.v("mainActivity", "profile id in frag: " + profileId);
-		JSONReader dataGrabber = new JSONReader("http://128.239.163.254:5000/profile_feed?user=" + profileId, getActivity());
+		JSONReader dataGrabber = new JSONReader("http://128.239.163.254:5000/news_feed?loggedInUser=" + profileId, getActivity());
 		dataGrabber.execute();
 	}
 
@@ -59,8 +60,10 @@ public class HomeFragment extends ListFragment {
 			Bundle savedInstanceState) {
 		//inflate correct layout
 		View v = inflater.inflate(R.layout.fragment_pager_list, container, false);
+		theView = v;
 		return v;
 	}
+
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {

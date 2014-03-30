@@ -29,6 +29,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </TableRow>
+    
+     <TableRow
+        android:id="@+id/tableRowCap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dip" >
+
+        <TextView
+            android:id="@+id/captionContent"
+            android:layout_weight="1"
+            android:gravity="left"
+            android:text="caption goes here"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+    </TableRow>
     <TableRow
         android:id="@+id/tableRow3"
         android:layout_width="wrap_content"

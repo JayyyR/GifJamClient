@@ -52,11 +52,14 @@ public class ListAdapter extends ArrayAdapter<FeedItem> {
 
 		//inflate our view if need be from correct layout
 		if (v == null) {
-
+			Log.v("recycle", "null");
 			LayoutInflater vi;
 			vi = LayoutInflater.from(getContext());
 			v = vi.inflate(R.layout.feed_view_item, null);
 
+		}
+		else{
+			Log.v("recycle", "not null");
 		}
 
 		//get correct fuzz item
@@ -97,16 +100,18 @@ public class ListAdapter extends ArrayAdapter<FeedItem> {
 		                gifContent.setVideoPath(mUrl);
 		        }
 		    });*/
-			
+
 			WebView webContent = (WebView) v.findViewById(R.id.webContent);
 			webContent.loadUrl(item.gif_url);
 			//callGifURL getGif = new callGifURL();
 			//getGif.execute();
-			
+
 
 			//webContent.getSettings().setLoadWithOverviewMode(true);
 			//webContent.getSettings().setUseWideViewPort(true);
 
+			TextView caption = (TextView) v.findViewById(R.id.captionContent);
+			caption.setText(item.caption);
 			Button likeButton = (Button) v.findViewById(R.id.likeButton);
 
 
@@ -115,7 +120,8 @@ public class ListAdapter extends ArrayAdapter<FeedItem> {
 		return v;
 
 	}
-	
+
+
 	/*class callGifURL extends AsyncTask<Void, Void, Void> {
 
 
@@ -142,13 +148,13 @@ public class ListAdapter extends ArrayAdapter<FeedItem> {
 			}
 			return null;
 		}
-		
+
 
 	    @Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
-			
+
 			Log.v("video", "playing gif");
 			webContent.playGif(stream);
 		}

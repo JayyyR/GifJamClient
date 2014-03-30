@@ -142,7 +142,8 @@ public class MainActivity extends Activity {
 			
 			Fragment fragment = new ProfileFragment();
 			Bundle bundle = new Bundle();
-			bundle.putString("profileId", profileId);
+			bundle.putString("lookingAt", profileId);
+			bundle.putString("userID", profileId);
 			bundle.putString("user", user);
 			fragment.setArguments(bundle);
 			
