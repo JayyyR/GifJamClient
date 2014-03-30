@@ -46,6 +46,7 @@ public class CameraActivity extends Activity {
 	String fileLoc;
 	String user;
 	String profileId;
+	boolean forProf;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,11 +54,12 @@ public class CameraActivity extends Activity {
 		//getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		//		WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.activity_camera);
-		
+
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			user = extras.getString("user");
 			profileId = extras.getString("profileId");
+			forProf = extras.getBoolean("forProf");
 		}
 
 
@@ -111,12 +113,18 @@ public class CameraActivity extends Activity {
 					msg.what=0;
 				}
 				else if(msg.what==2){
-					Intent intent = new Intent(thisActive, SendVideo.class);
-					intent.putExtra("file", fileLoc);
-					intent.putExtra("user", user);
-					intent.putExtra("profileId", profileId);
-				    startActivity(intent);
-				    msg.what=0;
+					if(!forProf){
+						Intent intent = new Intent(thisActive, SendVideo.class);
+						intent.putExtra("file", fileLoc);
+						intent.putExtra("user", user);
+						intent.putExtra("profileId", profileId);
+						startActivity(intent);
+						msg.what=0;
+					}
+					else{
+
+
+					}
 				}
 				super.handleMessage(msg);
 			}
@@ -124,7 +132,7 @@ public class CameraActivity extends Activity {
 
 		preview.addView(mPreview);
 		final Button captureButton = (Button) findViewById(R.id.button_capture);
-		
+
 		final Thread camCount = new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -145,7 +153,7 @@ public class CameraActivity extends Activity {
 							Log.v("recording", "after setting isrecording");
 							//captureButton.setText("Capture");
 							Log.v("recording", "after settting capture button");
-							
+
 							Message msg = handler.obtainMessage();
 							msg.what = 2; //break out
 							handler.sendMessage(msg);
@@ -217,11 +225,15 @@ public class CameraActivity extends Activity {
 								setCaptureButtonText("Capture");
 								isRecording = false;
 							}
-							Intent intent = new Intent(thisActive, SendVideo.class);
-							intent.putExtra("file", fileLoc);
-							intent.putExtra("user", user);
-							intent.putExtra("profileId", profileId);
-						    startActivity(intent);
+							if(!forProf){
+								Intent intent = new Intent(thisActive, SendVideo.class);
+								intent.putExtra("file", fileLoc);
+								intent.putExtra("user", user);
+								intent.putExtra("profileId", profileId);
+								startActivity(intent);}
+							else{
+
+							}
 							break;
 						case MotionEvent.ACTION_OUTSIDE:
 
@@ -314,9 +326,9 @@ public class CameraActivity extends Activity {
 		if(mCamera == null)
 			Log.v("null", "mcamera was null");
 		mMediaRecorder = new MediaRecorder();
-		
-		 // store the quality profile required
-	    CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
+
+		// store the quality profile required
+		CamcorderProfile profile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH);
 
 		// Step 1: Unlock and set camera to MediaRecorder
 		mCamera.unlock();
@@ -328,10 +340,10 @@ public class CameraActivity extends Activity {
 
 		// Step 3: Set a CamcorderProfile (requires API Level 8 or higher)
 		mMediaRecorder.setOutputFormat(profile.fileFormat);
-	    mMediaRecorder.setVideoEncoder(profile.videoCodec);
-	    mMediaRecorder.setVideoEncodingBitRate(profile.videoBitRate);
-	    mMediaRecorder.setVideoFrameRate(profile.videoFrameRate);
-	    mMediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
+		mMediaRecorder.setVideoEncoder(profile.videoCodec);
+		mMediaRecorder.setVideoEncodingBitRate(profile.videoBitRate);
+		mMediaRecorder.setVideoFrameRate(profile.videoFrameRate);
+		mMediaRecorder.setVideoSize(profile.videoFrameWidth, profile.videoFrameHeight);
 
 
 		// Step 4: Set output file

@@ -34,34 +34,42 @@ public final class R {
         public static final int ic_launcher=0x7f020002;
     }
     public static final class id {
-        public static final int action_camera=0x7f09001d;
-        public static final int action_settings=0x7f09001c;
+        public static final int action_camera=0x7f090025;
+        public static final int action_settings=0x7f090024;
         public static final int bio=0x7f090019;
+        public static final int biotext=0x7f090021;
         public static final int button_capture=0x7f090003;
         public static final int camera_preview=0x7f090000;
         public static final int captionContent=0x7f090015;
         public static final int captionField=0x7f090010;
         public static final int content_frame=0x7f09000e;
         public static final int drawer_layout=0x7f09000d;
-        public static final int feed=0x7f09001b;
         public static final int follow=0x7f09001a;
+        public static final int gifUser=0x7f09001b;
         public static final int label=0x7f090005;
         public static final int left_drawer=0x7f09000f;
         public static final int likeButton=0x7f090016;
         public static final int likes=0x7f090017;
         public static final int login=0x7f09000b;
+        public static final int nextButton=0x7f09001e;
         public static final int passField=0x7f090009;
+        public static final int prevButton=0x7f09001d;
         public static final int profileGif=0x7f090018;
+        public static final int profpicbutton=0x7f090023;
         public static final int pwordlabel=0x7f090008;
         public static final int register=0x7f09000c;
+        public static final int search=0x7f09001f;
         public static final int sendVideo=0x7f090011;
         public static final int tableRow1=0x7f090004;
         public static final int tableRow2=0x7f090007;
         public static final int tableRow3=0x7f09000a;
         public static final int tableRowCap=0x7f090014;
+        public static final int tableRoww=0x7f09001c;
         public static final int textCounter=0x7f090002;
+        public static final int updatebutton=0x7f090022;
         public static final int userField=0x7f090006;
         public static final int userName=0x7f090012;
+        public static final int usernamesearch=0x7f090020;
         public static final int webContent=0x7f090013;
         public static final int whitebox=0x7f090001;
     }
@@ -74,13 +82,16 @@ public final class R {
         public static final int feed_view_item=0x7f030005;
         public static final int fragement_profile=0x7f030006;
         public static final int fragment_pager_list=0x7f030007;
+        public static final int fragment_search=0x7f030008;
+        public static final int fragment_settings=0x7f030009;
     }
     public static final class menu {
         public static final int camera=0x7f080000;
         public static final int login=0x7f080001;
         public static final int main=0x7f080002;
         public static final int profile=0x7f080003;
-        public static final int send_video=0x7f080004;
+        public static final int search=0x7f080004;
+        public static final int send_video=0x7f080005;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
@@ -89,6 +100,7 @@ public final class R {
         public static final int title_activity_camera=0x7f060003;
         public static final int title_activity_login=0x7f060005;
         public static final int title_activity_profile=0x7f060006;
+        public static final int title_activity_search=0x7f060007;
         public static final int title_activity_send_video=0x7f060004;
     }
     public static final class style {

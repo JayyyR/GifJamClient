@@ -46,6 +46,10 @@
             android:name="com.jayyyR.gifjam.Profile"
             android:label="@string/title_activity_profile" >
         </activity>
+        <activity
+            android:name="com.jayyyR.gifjam.Search"
+            android:label="@string/title_activity_search" >
+        </activity>
     </application>
 
 </manifest>

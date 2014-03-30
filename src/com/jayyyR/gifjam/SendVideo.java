@@ -18,6 +18,8 @@ import org.apache.http.protocol.HttpContext;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,11 +54,12 @@ public class SendVideo extends Activity {
 	String user;
 	String profileId;
 	String captionString;
+	Activity active;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_send_video);
-
+		active = this;
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			fileLoc = extras.getString("file");
@@ -92,6 +95,14 @@ public class SendVideo extends Activity {
 	}
 
 	private class sendVideo extends AsyncTask<String, Void, String> {
+		
+		ProgressDialog pDialog;
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			pDialog= ProgressDialog.show(active, "Sending and Converting Video","Please Wait", true);
+		}
 
 		@Override
 		protected String doInBackground(String... urls) {
@@ -133,8 +144,15 @@ public class SendVideo extends Activity {
 			return null;
 		}
 
+		
+
 		@Override
 		protected void onPostExecute(String result) {
+			pDialog.dismiss();
+			Intent intent = new Intent(active, MainActivity.class);
+			intent.putExtra("user", user);
+			intent.putExtra("profileId", profileId);
+			startActivity(intent);
 
 		}
 	}

@@ -23,7 +23,7 @@ public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
-	String profileId;
+	public String profileId;
 	
 	String user;
 
@@ -73,6 +73,8 @@ public class MainActivity extends Activity {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
+		
+		selectItem(0);
 
 	}
 
@@ -132,8 +134,19 @@ public class MainActivity extends Activity {
 			Fragment fragment = new HomeFragment();
 			Bundle bundle = new Bundle();
 			bundle.putString("profileId", profileId);
+			bundle.putString("userName", user);
 			fragment.setArguments(bundle);
 			// Insert the fragment by replacing any existing fragment
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		}
+		
+		else if (position == 1){
+			Fragment fragment = new SearchFragment();
+			Bundle bundle = new Bundle();
+			bundle.putString("userID", profileId);
+			bundle.putString("user", user);
+			fragment.setArguments(bundle);
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 		}
@@ -149,6 +162,23 @@ public class MainActivity extends Activity {
 			
 			FragmentManager fragmentManager = getFragmentManager();
 			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		}
+		
+		else if (position == 3){
+			
+			Fragment fragment = new SettingsFragment();
+			Bundle bundle = new Bundle();;
+			bundle.putString("userID", profileId);
+			bundle.putString("user", user);
+			fragment.setArguments(bundle);
+			
+			FragmentManager fragmentManager = getFragmentManager();
+			fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+		}
+		
+		else if (position == 4){
+			Intent intent = new Intent(this, Login.class);
+		    startActivity(intent);
 		}
 
 		// Highlight the selected item, update the title, and close the drawer
@@ -167,7 +197,13 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, CameraActivity.class);
 		intent.putExtra("user", user);
 		intent.putExtra("profileId", profileId);
+		intent.putExtra("forProf", false);
 	    startActivity(intent);
 	}
+	
+	@Override
+	public void onBackPressed() {
+	}
+
 
 }
